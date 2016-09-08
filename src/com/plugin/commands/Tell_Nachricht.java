@@ -1,6 +1,8 @@
 package com.plugin.commands;
 
-import org.bukkit.Bukkit;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -22,18 +24,17 @@ public class Tell_Nachricht extends CoderCommand {
 	public boolean onCmd(CommandSender arg0, String[] args) {
 		Player p = (Player)arg0;
 			if(args.length >= 2) {
-				Player p2 = Bukkit.getPlayer(args[0]);
-
+				Player p2 = getOnlinePlayer(args[1]);
 				if(p2 != null) {
-					for(int i = 1; i < args.length; i++) {
-						message = message + args[i]+ " ";
-					}
+					message = Arrays.stream(args).collect(Collectors.joining(" ")).replace(args[0], "");
+					message = message.replace(args[1], "");
 					p.sendMessage("§ctell §r-> §a " + p2.getName() + " §6 " + message);
 					p2.sendMessage("§c " + p.getName() + " §r-> §ctell §6>> " + message);
-					message = " ";
-
+					message = "";
+					return true;
 				} else {
 					p.sendMessage("§b Spieler ist nicht online!");
+					return true;
 				}
 
 			}
